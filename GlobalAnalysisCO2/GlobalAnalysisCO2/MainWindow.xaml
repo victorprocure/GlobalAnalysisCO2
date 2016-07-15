@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:GlobalAnalysisCO2"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:vm="clr-namespace:GlobalAnalysisCO2.ViewModels"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Window.DataContext>
@@ -16,13 +17,21 @@
             <RowDefinition Height="270*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <lvc:CartesianChart>
+        <lvc:CartesianChart Grid.Row="0">
             <lvc:CartesianChart.Series>
                 <lvc:LineSeries Values="{Binding ChartValues}" Fill="Transparent" StrokeThickness="1.5" PointGeometry="{x:Null}" />
             </lvc:CartesianChart.Series>
             <lvc:CartesianChart.AxisY>
                 <lvc:Axis Title="Reading" />
             </lvc:CartesianChart.AxisY>
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis ShowLabels="False" />
+            </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
+        <UniformGrid Grid.Row="1" Rows="1">
+            <local:NavigationButton Icon="Home" Label="Home" />
+            <local:NavigationButton Icon="Gear" Label="Configuration" />
+            <local:NavigationButton Icon="Question" Label="About" />
+        </UniformGrid>
     </Grid>
 </Window>

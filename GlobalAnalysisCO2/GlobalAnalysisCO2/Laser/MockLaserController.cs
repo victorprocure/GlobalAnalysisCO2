@@ -38,7 +38,7 @@ namespace GlobalAnalysisCO2.Laser
             while (!worker.CancellationPending)
             {
                 OnTimerElapsed();
-                Thread.Sleep(TimeSpan.FromSeconds(1));
+                Thread.Sleep(TimeSpan.FromMilliseconds(500));
             }
         }
 

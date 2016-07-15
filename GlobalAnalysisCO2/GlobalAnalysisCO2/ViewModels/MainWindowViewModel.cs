@@ -7,15 +7,10 @@
 namespace GlobalAnalysisCO2.ViewModels
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Laser;
     using LiveCharts;
     using LiveCharts.Defaults;
-    using LiveCharts.Wpf;
     using Ninject;
 
     public class MainWindowViewModel : INotifyPropertyChanged
@@ -63,6 +58,8 @@ namespace GlobalAnalysisCO2.ViewModels
         private void OnLaserRead(object sender, double e)
         {
             this.chartValues.Add(new ObservableValue(e));
+
+            if (this.chartValues.Count > 20) this.chartValues.RemoveAt(0);
         }
     }
 }
