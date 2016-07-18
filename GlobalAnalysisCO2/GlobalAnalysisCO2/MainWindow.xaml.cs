@@ -21,6 +21,14 @@ namespace GlobalAnalysisCO2
     /// </summary>
     public partial class MainWindow : Window
     {
+        private AboutViewModel aboutViewModel = new AboutViewModel();
+
+        private ConfigurationViewModel configurationViewModel = new ConfigurationViewModel();
+
+        private BaseViewModel currentVM;
+
+        private HomeViewModel homeVM = new HomeViewModel();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -28,18 +36,19 @@ namespace GlobalAnalysisCO2
             this.HomeButton_MouseLeftButtonDown(this, null);
         }
 
-        private BaseViewModel currentVM;
-        private HomeViewModel homeVM = new HomeViewModel();
-        private ConfigurationViewModel configurationViewModel = new ConfigurationViewModel();
-
-        private void HomeButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void AboutButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.SwitchViewModel(this.homeVM);
+            this.SwitchViewModel(this.aboutViewModel);
         }
 
         private void GearButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.SwitchViewModel(this.configurationViewModel);
+        }
+
+        private void HomeButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.SwitchViewModel(this.homeVM);
         }
 
         private void SwitchViewModel(BaseViewModel viewModel)

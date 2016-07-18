@@ -13,10 +13,13 @@ namespace GlobalAnalysisCO2.Laser
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Windows.Threading;
 
     public class MockLaserController : ILaserController
     {
         private double ticks;
+
+        private DispatcherTimer timer;
         private BackgroundWorker worker;
 
         public event EventHandler<int> CO2Reading;
@@ -29,18 +32,7 @@ namespace GlobalAnalysisCO2.Laser
 
         public void Disconnect()
         {
-            //is.worker.CancelAsync();
-        }
-
-        private void BackgroundWorkerOnDoWork(object sender, DoWorkEventArgs e)
-        {
-            var worker = (BackgroundWorker)sender;
-
-            while (!this.worker.CancellationPending)
-            {
-                OnTimerElapsed();
-                Thread.Sleep(TimeSpan.FromMilliseconds(500)); // For the time being this has to remain quite high to avoid a bug in LiveCharts
-            }
+            this.timer.Stop();
         }
 
         private void InitializeReadings()
@@ -57,20 +49,23 @@ namespace GlobalAnalysisCO2.Laser
 
             theta = Math.Sin(theta);
 
-            CO2Reading?.Invoke(this, (int)Math.Round(theta * 1000, 0)); // Because we cannot invoke double precision ( the Controller is int), we round
+            var reading = (int)Math.Round(theta * 1000, 0);
 
-            this.ticks += 1;
+            CO2Reading?.Invoke(this, reading); // Because we cannot invoke double precision ( the Controller is int), we round
+
+            this.ticks += 0.1;
         }
 
         private void StartWorker()
         {
-            this.worker = new BackgroundWorker
+            this.timer = new DispatcherTimer(DispatcherPriority.Send) { Interval = TimeSpan.FromMilliseconds(10) };
+
+            timer.Tick += (sender, args) =>
             {
-                WorkerSupportsCancellation = true
+                OnTimerElapsed();
             };
 
-            worker.DoWork += BackgroundWorkerOnDoWork;
-            worker.RunWorkerAsync();
+            this.timer.Start();
         }
 
         #region IDisposable Support

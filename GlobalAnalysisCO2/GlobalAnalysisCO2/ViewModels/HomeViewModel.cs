@@ -40,6 +40,19 @@ namespace GlobalAnalysisCO2.ViewModels
             }
         }
 
+        public override void StartView()
+        {
+            this.visible = true;
+            this.InitializeLaser();
+        }
+
+        public override void SuspendView()
+        {
+            this.laserController.Disconnect();
+            this.visible = false;
+            this.chartValues.Clear();
+        }
+
         private void InitializeLaser()
         {
             var kernel = new StandardKernel(new LaserBindings());
@@ -57,19 +70,6 @@ namespace GlobalAnalysisCO2.ViewModels
 
                 if (this.chartValues.Count > 200) this.chartValues.RemoveAt(0);
             }
-        }
-
-        public override void SuspendView()
-        {
-            this.laserController.Disconnect();
-            this.visible = false;
-            this.chartValues.Clear();
-        }
-
-        public override void StartView()
-        {
-            this.visible = true;
-            this.InitializeLaser();
         }
     }
 }

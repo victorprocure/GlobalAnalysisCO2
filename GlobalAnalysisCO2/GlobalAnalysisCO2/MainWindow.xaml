@@ -19,12 +19,18 @@
                     <lvc:LineSeries Fill="Transparent" StrokeThickness="1.5" PointGeometry="{x:Null}" Values="{Binding ChartValues}" />
                 </lvc:CartesianChart.Series>
                 <lvc:CartesianChart.AxisY>
-                    <lvc:Axis Title="Reading" />
+                    <lvc:Axis Title="Reading" MinValue="-1000" MaxValue="1000" />
                 </lvc:CartesianChart.AxisY>
                 <lvc:CartesianChart.AxisX>
-                    <lvc:Axis ShowLabels="False" />
+                    <lvc:Axis ShowLabels="False" MaxValue="200" MinValue="5" />
                 </lvc:CartesianChart.AxisX>
             </lvc:CartesianChart>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ConfigurationViewModel}">
+            <TextBlock Text="{Binding ViewTitle}" />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AboutViewModel}">
+            <TextBlock Text="{Binding ViewTitle}" />
         </DataTemplate>
     </Window.Resources>
     <Grid>
@@ -36,7 +42,7 @@
         <UniformGrid Grid.Row="1" Rows="1">
             <local:NavigationButton Icon="Home" Label="Home" MouseLeftButtonUp="HomeButton_MouseLeftButtonDown" />
             <local:NavigationButton Icon="Gear" Label="Configuration" MouseLeftButtonDown="GearButton_MouseLeftButtonDown" />
-            <local:NavigationButton Icon="Question" Label="About" />
+            <local:NavigationButton Icon="Question" Label="About" MouseLeftButtonDown="AboutButton_MouseLeftButtonDown" />
         </UniformGrid>
     </Grid>
 </Window>
