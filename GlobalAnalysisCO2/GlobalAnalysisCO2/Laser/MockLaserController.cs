@@ -16,9 +16,10 @@ namespace GlobalAnalysisCO2.Laser
 
     public class MockLaserController : ILaserController
     {
-        private long ticks;
+        private double ticks;
+        private BackgroundWorker worker;
 
-        public event EventHandler<double> CO2Reading;
+        public event EventHandler<int> CO2Reading;
 
         public bool Connect()
         {
@@ -28,17 +29,17 @@ namespace GlobalAnalysisCO2.Laser
 
         public void Disconnect()
         {
-            throw new NotImplementedException();
+            //is.worker.CancelAsync();
         }
 
         private void BackgroundWorkerOnDoWork(object sender, DoWorkEventArgs e)
         {
-            BackgroundWorker worker = (BackgroundWorker)sender;
+            var worker = (BackgroundWorker)sender;
 
-            while (!worker.CancellationPending)
+            while (!this.worker.CancellationPending)
             {
                 OnTimerElapsed();
-                Thread.Sleep(TimeSpan.FromMilliseconds(500));
+                Thread.Sleep(TimeSpan.FromMilliseconds(500)); // For the time being this has to remain quite high to avoid a bug in LiveCharts
             }
         }
 
@@ -51,17 +52,19 @@ namespace GlobalAnalysisCO2.Laser
         {
             var handler = this.CO2Reading;
 
-            double theta = Math.Sin(this.ticks);
-            //theta /= 10;
+            double theta = this.ticks * 2 * Math.PI; // Calculate circle point for sine wave
+            theta /= 20; //For our mock this will be the total number of points on our graph
 
-            CO2Reading?.Invoke(this, theta);
+            theta = Math.Sin(theta);
 
-            this.ticks++;
+            CO2Reading?.Invoke(this, (int)Math.Round(theta * 1000, 0)); // Because we cannot invoke double precision ( the Controller is int), we round
+
+            this.ticks += 1;
         }
 
         private void StartWorker()
         {
-            BackgroundWorker worker = new BackgroundWorker
+            this.worker = new BackgroundWorker
             {
                 WorkerSupportsCancellation = true
             };

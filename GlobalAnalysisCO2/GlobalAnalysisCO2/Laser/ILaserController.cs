@@ -8,7 +8,7 @@ namespace GlobalAnalysisCO2.Laser
 {
     internal interface ILaserController : IDisposable
     {
-        event EventHandler<double> CO2Reading;
+        event EventHandler<int> CO2Reading;
 
         bool Connect();
 

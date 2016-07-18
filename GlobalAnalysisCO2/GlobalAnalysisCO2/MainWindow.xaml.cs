@@ -24,8 +24,34 @@ namespace GlobalAnalysisCO2
         public MainWindow()
         {
             InitializeComponent();
+
+            this.HomeButton_MouseLeftButtonDown(this, null);
         }
 
-        public MainWindowViewModel ViewModel => (MainWindowViewModel)this.DataContext;
+        private BaseViewModel currentVM;
+        private HomeViewModel homeVM = new HomeViewModel();
+        private ConfigurationViewModel configurationViewModel = new ConfigurationViewModel();
+
+        private void HomeButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.SwitchViewModel(this.homeVM);
+        }
+
+        private void GearButton_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.SwitchViewModel(this.configurationViewModel);
+        }
+
+        private void SwitchViewModel(BaseViewModel viewModel)
+        {
+            if (this.currentVM != null)
+            {
+                this.currentVM.SuspendView();
+            }
+
+            this.DataContext = viewModel;
+            this.currentVM = viewModel;
+            this.currentVM.StartView();
+        }
     }
 }
